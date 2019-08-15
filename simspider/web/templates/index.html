@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>短文本相似</title>
+    <style>
+        body{
+            margin: 10px;
+            padding: 10px;
+        }
+
+        #content{
+            margin-top: 40px;
+            width: 1400px;
+            height: 500px;
+        }
+
+        #upload{
+            width: 10%;
+            height: 100%;
+            float: left;
+            border: 1px solid red;
+            margin-left: 10px;
+        }
+
+        #undeal,#dealing, #dealed{
+            width: 25%;
+            height: 100%;
+            float: left;
+            border: 1px solid red;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+    <div id="upload">
+        <span style="font-size: 25px">文件上传</span>
+        <form method="post" enctype="multipart/form-data">
+            <b>选择文件：</b>
+            <input type="file" id="file" name="file"></br>
+            <input type="button" id="btn" value="上传">
+        </form>
+    </div>
+    <div id="undeal">
+        <span style="font-size: 25px">未处理</span>
+        <ul>
+        {% if not undeals %}
+            还没有文件
+        {% else %}
+            {% for unfile in undeals %}
+                <li>{{ unfile }}</li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+    </div>
+    <div id="dealing">
+        <span style="font-size: 25px">处理中</span>
+        <ul>
+        {% if not dealings %}
+            还没有文件
+        {% else %}
+            {% for dealing in dealings %}
+                <li>{{ dealing }}</li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+    </div>
+    <div id="dealed">
+        <span style="font-size: 25px">已处理</span>
+        <ul>
+        {% if not dealeds %}
+            还没有文件
+        {% else %}
+            {% for filed in dealeds %}
+                <li>{{ filed }}--<a href="/download/{{filed}}">下载</a></li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="static/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $('#btn').on("click", function () {
+        var file_obj = $("#file")[0].files[0];
+        var formdata = new FormData;
+        formdata.append('file', file_obj);
+        $.ajax({
+            url: '/upload',
+            type: 'post',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function(res){
+                var data = JSON.parse(res);
+                if (data.code==200){
+                    alert(data.msg)
+                }else if(data.code==400){
+                    alert(data.msg)
+                }else if(data.code==405){
+                    alert(data.msg)
+                }
+            }
+        })
+    })
+</script>
+</html>

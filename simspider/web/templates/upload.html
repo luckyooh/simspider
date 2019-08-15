@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" enctype="multipart/form-data">
+    <b>文件</b></br>
+    <input type="file" id="file" name="file"></br>
+    <input type="button" id="btn" value="提交">
+</form>
+</body>
+<script type="text/javascript" src="static/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $('#btn').on("click", function () {
+        var file_obj = $("#file")[0].files[0];
+        var formdata = new FormData;
+        formdata.append('file', file_obj);
+        $.ajax({
+            url: '/upload',
+            type: 'post',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function(res){
+                var data = JSON.parse(res);
+                if (data.code==200){
+                    alert(data.msg)
+                }else if(data.code==400){
+                    alert(data.msg)
+                }else if(data.code==405){
+                    alert(data.msg)
+                }
+            }
+        })
+    })
+</script>
+</html>
